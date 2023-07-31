@@ -14,7 +14,7 @@ Route::get('clubs/{id}', [HomeController::class, 'club_data'])->name('index.club
 Route::get('get_club/{id}', [HomeController::class, 'show_club'])->name('index.get_club');
 
 // AUTH ROUTES
-Auth::routes(['verify' => true]);
+// Auth::routes(['verify' => true]);
 
 // EVENT ROUTES
 Route::get('events', [EventsController::class, 'index'])->name('events');

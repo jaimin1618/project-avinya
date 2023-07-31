@@ -1,66 +1,78 @@
-$(() => { // console.log('adminForm.js ready!');
+$(() => {
+    // console.log('adminForm.js ready!');
     // functions;
     $.fn.ajaxConfig = () => {
         $.ajaxSetup({
             headers: {
-                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-            }
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content'),
+            },
         });
-    }
+    };
 
     $.fn.getClubs = () => {
-
         let url = '/admin/clubs';
-        $.get(url).then(JSON.parse).then((json) => {
-            if (json.status) {
-
-                $.each(json.data, (i, opt) => {
-                    $('#dropable').append(`<option data-key='${i + 1}'> ${opt.clubName} </option>`);
-                });
-
-            } else {
-                $('#dropable')
-                .empty()
-                .append(`<option data-key='0'>There is network problem, try again later</option>`)
-                .css('border', '3px solid red');
-            }
-        });
-
-    }
-
+        $.get(url)
+            .then(JSON.parse)
+            .then((json) => {
+                if (json.status) {
+                    $.each(json.data, (i, opt) => {
+                        $('#dropable').append(
+                            `<option data-key='${i + 1}'> ${
+                                opt.clubName
+                            } </option>`
+                        );
+                    });
+                } else {
+                    $('#dropable')
+                        .empty()
+                        .append(
+                            `<option data-key='0'>There is network problem, try again later</option>`
+                        )
+                        .css('border', '3px solid red');
+                }
+            });
+    };
 
     // run functions
     $.fn.ajaxConfig();
     $.fn.getClubs();
 
-    const URL = '/events/image';
-    let form = $('#form')[0];
-    $('#eventForm').on('submit', (e) => { e.preventDefault();
+    $('#eventForm').on('submit', (e) => {
+        const URL = 'events/image';
+        e.preventDefault();
         $('#status').empty();
-        
+
         let form = $('#eventForm')[0];
+        console.log(form);
         let data = new FormData(form);
+        console.log(data);
 
         // sanitization & filtering
         let msg = [];
         // alpha-numeric only
-        let regex = /^[a-z\d\-_\s]+$/i  ;
+        let regex = /^[a-z\d\-_\s]+$/i;
         for (let [key, val] of data) {
             if (key === 'name') {
                 if (val.length < 4) {
                     msg.push('Event name must be more that 4 character long');
                 } else if (!regex.test(val)) {
-                    msg.push('Event name can only contain a-z, A-Z, 0-9 (alpha-numeric), space, -, _ characters');
+                    msg.push(
+                        'Event name can only contain a-z, A-Z, 0-9 (alpha-numeric), space, -, _ characters'
+                    );
                 }
             } else if (key === 'date') {
                 let curr = new Date();
                 let given = new Date(val);
                 if (given < curr) {
-                    msg.push('Enter valid date, you have provided previous(past) date');
+                    msg.push(
+                        'Enter valid date, you have provided previous(past) date'
+                    );
                 }
             } else if (key === 'text') {
                 if (val.length < 10) {
-                    msg.push('Event description must be more than 10 character long');
+                    msg.push(
+                        'Event description must be more than 10 character long'
+                    );
                 }
             } else if (key === 'level') {
                 val = parseInt(val, 10);
@@ -76,7 +88,7 @@ $(() => { // console.log('adminForm.js ready!');
             } */
         }
 
-        if  (msg.length > 0) {
+        if (msg.length > 0) {
             $.each(msg, (i, m) => {
                 $('#status').append(
                     `<div class="alert alert-warning">
@@ -85,7 +97,6 @@ $(() => { // console.log('adminForm.js ready!');
                 );
             });
         } else {
-
             let object = {};
             for (let [key, val] of data) {
                 object[key] = val;
@@ -97,41 +108,41 @@ $(() => { // console.log('adminForm.js ready!');
                 dataType: 'json',
                 data: object,
                 success: (data) => {
+                    console.log(data);
                     if (data) {
                         $('#status')
-                        .empty()
-                        .append(
-                        `<div class="alert alert-success">
+                            .empty()
+                            .append(
+                                `<div class="alert alert-success">
                             <b>Success!</b>
                             <small>Your event has been created</small>
                         </div>`
-                        );
+                            );
                     } else {
                         $('#status')
-                        .empty()
-                        .append(
-                        `<div class="alert alert-warning">
+                            .empty()
+                            .append(
+                                `<div class="alert alert-warning">
                             <b>Error!</b>
                             <small>There was some problem with network connection</small>
                         </div>`
-                        );
+                            );
                     }
-              
                 },
-                error: (err) => {                    
+                error: (err) => {
+                    console.log(err);
                     $('#status')
-                    .empty()
-                    .append(
-                        `<div class="alert alert-danger">
+                        .empty()
+                        .append(
+                            `<div class="alert alert-danger">
                             <small>There was some problem with network</small>
                             <small>Try again, later</small>
                         </div>`
-                    );
-                }
+                        );
+                },
             });
         }
     });
-
 }); // DOMLoaded
 
 // CLUB_NAME => integer 0, 1, ...

@@ -2,33 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Event;
+use Illuminate\Http\Request;
 
-class EventsController extends Controller {
+class EventsController extends Controller
+{
 
-    function index () {
+    public function index()
+    {
         return view('events');
     }
 
-    /*
-    function imageUpload (Request $req) {
-        $req->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-        ]);
+    public function addEvent(Request $req)
+    {
 
-        $imageName = time().'.'.$req->image->extension();
-        // $req->image->move(public_path('images'), $imageName); // FOR PUBLIC/images
-        $req->image->storeAs('images/events', $imageName); // FOR STORAGE/APP/IMAGE
-
-        return back()
-            ->with('success', 'Image uploaded!')
-            ->with('image', $imageName);
-    }
-    */
-
-    function addEvent (Request $req) {
         $event = new Event;
+
+        // $req->created_by = "admin";
 
         $req->validate([
             'club' => ['required', 'string', 'max:255'],
@@ -37,7 +27,7 @@ class EventsController extends Controller {
             'name' => ['required', 'string'],
             'level' => ['required', 'integer', 'min:0', 'max:5'],
             'text' => ['required'],
-            'created_by' => ['required', 'string', 'max:255']
+
         ]);
 
         $event->club = $req->club;
@@ -46,18 +36,19 @@ class EventsController extends Controller {
         $event->eventName = $req->name;
         $event->level = $req->level;
         $event->description = $req->text;
-        $event->certificate = $req->certificate;
-        $event->created_by = $req->created_by;
+        $event->certificate = $req->certificate || false;
+        $event->created_by = $req->created_by || "admin";
 
         if ($event->save()) {
             return json_encode(true);
-        } 
+        }
 
         return json_encode(false);
     }
 
-    function displayEvents (Request $req) {
-        $events = Event::orderBy('created_at','desc')->get();
+    public function displayEvents(Request $req)
+    {
+        $events = Event::orderBy('created_at', 'desc')->get();
         return json_encode($events);
     }
 

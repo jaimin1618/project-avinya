@@ -16,7 +16,7 @@
 
     <div id="status"></div>
 
-    <label>Select The Club</label><br>
+    <label>Select The Startup</label><br>
         <select name="club" id="dropable" class = "form-control" required>
            <option value="0">Other</option>
         </select>
@@ -67,27 +67,11 @@
         <textarea name="text" type="text" class = "Description form-control" style = "resize: none;" placeholder="About Event" required></textarea><br> 
     </div>
 
-    <div class="row" style="margin-top: 2rem; margin-left:0.1rem;">
-        <div class="col-lg-8">
-            <label>Will you provide a certificate?</label><br>
-        </div>
-
-        <div class="col-lg-4" style="display: flex;">
-            <div class="form-check form-check-inline">
-                <input name="certificate"  class="form-check-input " type="radio" id="inlineRadio1" value="1" required>
-                <label class="form-check-label" for="inlineRadio1">Yes</label>
-            </div>
-            
-            <div class="form-check form-check-inline"> 
-                <input name="certificate" class="form-check-input " type="radio" id="inlineRadio2" value="0">
-                <label class="form-check-label" for="inlineRadio2">No</label>
-            </div>
-        </div>
-    </div>
+    
 </div>
 
     <div style = "display: flex; justify-content: center;align-items: center; margin-top: 1.2rem;" class = "submit">
-        <button class = "submit form-control" id = "submit" >Submit</button>
+        <button class = "submit form-control" id = "submit">Submit</button>
     </div>
 </form>
 </div>

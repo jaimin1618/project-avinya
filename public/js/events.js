@@ -37,9 +37,7 @@ $(() => {
                             <div class="row" style="margin-top:2rem; display:flex; justify-content:space-evenly;">
                                 <div class="col-lg-5">
                                     <h4>Date-time: <br> ${data.date} <br/> ${data.time}</h4> 
-                                    <div class="event-name">
-                                        <h4>certificate: ${data.certificate ? 'YES' : 'NO'}</h4>
-                                    </div>
+                                 
                                 </div>
                                 <div class="col-lg-2">
                                     <h4>Organized by: ${data.club}</h4>

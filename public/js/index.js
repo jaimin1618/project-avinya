@@ -1,19 +1,21 @@
-$(() => { // console.log('index.js ready!');
+$(() => {
+    // console.log('index.js ready!');
 
     // functions;
     $.fn.ajaxConfig = () => {
         $.ajaxSetup({
             headers: {
-                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-           }
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content'),
+            },
         });
-    }
+    };
 
-    $.fn.renderClub = ({id, clubName, logo}) => {
+    $.fn.renderClub = ({ id, clubName, logo, images }) => {
+        console.log(logo);
         $('.allClubs').append(
             `
                 <div class="card col-mg-4" data-key="${id}">
-                    <img src="/images/logo/${logo}" class="card-img-top" alt="${clubName}">
+                    <img src=${images} class="card-img-top" alt="${clubName}">
                     <div class="card-body">
                         <h5 class="card-title">${clubName}</h5>
                         <a href="/clubs/${id}" class="btn btn-info" data-key="${id}">View more</a>
@@ -21,14 +23,16 @@ $(() => { // console.log('index.js ready!');
                 </div>
             `
         );
-    }
+    };
 
     $.fn.allClubs = () => {
         $.ajax({
             url: `clubs`,
             type: 'GET',
             dataType: 'json',
-            success: (data) => { // console.log(data);
+            success: (data) => {
+                console.log(data);
+                // console.log(data);
                 if (data.length > 0) {
                     $.each(data, (i, item) => {
                         $.fn.renderClub(item);
@@ -39,19 +43,18 @@ $(() => { // console.log('index.js ready!');
             },
             error: (err) => {
                 $('#dataNotFound').css('display', 'block');
-            }
+            },
         });
-    }
+    };
 
     // run functions
     $.fn.ajaxConfig();
     $.fn.allClubs();
-    
+
     $(document).on('click', '.btn-info', (e) => {
         let id = $(e.target).data('key');
         console.log(id);
 
         window.location.href = '/clubs/' + id;
     });
-
 }); // DOMLoaded
